@@ -66,9 +66,11 @@
         try {
           this.setLoading(true)
 
+          let claps = this.claps
+
           await this.likePost({
             id: this.postId,
-            claps: ++this.claps
+            claps: ++claps,
           })
         } catch (error) {
           console.error(error)

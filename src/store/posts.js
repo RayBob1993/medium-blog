@@ -50,6 +50,8 @@ export default {
       const { data } = await API.patch(`/posts/${id}`, {
         claps,
       })
+
+      commit('setLike', data)
     },
 
     async addPost ({ commit }, { title, description, claps, createdAt, updateAt, userId }) {
@@ -86,6 +88,19 @@ export default {
         perPage,
         totalCount,
       }
+    },
+    setLike: (state, { id, claps }) => {
+      if (state.post) {
+        if (state.post.id === id) {
+          state.post.claps = claps
+        }
+      }
+
+      state.posts.forEach(item => {
+        if (item.id === id) {
+          item.claps = claps
+        }
+      })
     },
     setPost: (state, post) => {
       state.post = post[0]
