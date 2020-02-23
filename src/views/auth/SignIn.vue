@@ -2,15 +2,22 @@
   <AuthLayout>
     <div class="container">
       <form action="">
-        <b-field label="Логин">
+        <b-field
+          label="Логин"
+          :type="!$v.form.model.login.required ? 'is-danger' : 'is-success'"
+          :message="!$v.form.model.login.required ? 'Поле обязательно для заполнения' : ''"
+        >
           <b-input
             v-model="form.model.login"
             type="text"
-            maxlength="30"
           />
         </b-field>
 
-        <b-field label="Пароль">
+        <b-field
+          label="Пароль"
+          :type="!$v.form.model.password.required ? 'is-danger' : 'is-success'"
+          :message="!$v.form.model.password.required ? 'Поле обязательно для заполнения' : ''"
+        >
           <b-input
             v-model="form.model.password"
             type="password"
@@ -37,6 +44,7 @@
 <script>
   import { mapActions } from 'vuex'
   import { Loading } from '../../mixins/utils'
+  import { required } from 'vuelidate/lib/validators'
 
   export default {
     name: 'SignInPage',
@@ -51,11 +59,29 @@
         },
       },
     }),
+    validations: {
+      form: {
+        model: {
+          login: {
+            required,
+          },
+          password: {
+            required,
+          },
+        },
+      },
+    },
     methods: {
       ...mapActions('auth', [
         'signIn',
       ]),
       async onSumbit () {
+        const formValid = !this.$v.$invalid
+
+        if (!formValid) {
+          return
+        }
+
         try {
           this.setLoading(true)
 

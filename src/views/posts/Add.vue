@@ -2,14 +2,22 @@
   <DefaultLayout>
     <div class="container">
       <form action="">
-        <b-field label="Название">
+        <b-field
+          label="Название"
+          :type="!$v.form.model.title.required ? 'is-danger' : 'is-success'"
+          :message="!$v.form.model.title.required ? 'Поле обязательно для заполнения' : ''"
+        >
           <b-input
             v-model="form.model.title"
             type="text"
           />
         </b-field>
 
-        <b-field label="Описание">
+        <b-field
+          label="Описание"
+          :type="!$v.form.model.description.required ? 'is-danger' : 'is-success'"
+          :message="!$v.form.model.description.required ? 'Поле обязательно для заполнения' : ''"
+        >
           <b-input
             v-model="form.model.description"
             type="textarea"
@@ -35,6 +43,7 @@
 <script>
   import { mapState, mapActions } from 'vuex'
   import { Loading } from '../../mixins/utils'
+  import { required } from 'vuelidate/lib/validators'
   import PostModel from '../../models/PostModel'
 
   export default {
@@ -50,6 +59,18 @@
         },
       },
     }),
+    validations: {
+      form: {
+        model: {
+          title: {
+            required,
+          },
+          description: {
+            required,
+          },
+        },
+      },
+    },
     computed: {
       ...mapState('user', [
         'user',
@@ -60,6 +81,12 @@
         'addPost',
       ]),
       async onSubmit () {
+        const formValid = !this.$v.$invalid
+
+        if (!formValid) {
+          return
+        }
+
         try {
           this.setLoading(true)
 

@@ -5,6 +5,10 @@ import {
   faAngleRight,
   faAngleLeft,
   faHeart,
+  faCheck,
+  faExclamationCircle,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -12,6 +16,10 @@ library.add(
   faAngleRight,
   faAngleLeft,
   faHeart,
+  faCheck,
+  faExclamationCircle,
+  faEye,
+  faEyeSlash,
 )
 
 Vue.use(Buefy, {
