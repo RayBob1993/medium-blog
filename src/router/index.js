@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 import Home from '../views/Home.vue'
 import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/auth/SignIn.vue'
@@ -21,10 +22,16 @@ const routes = [
   {
     path: '/posts/add',
     component: PostAdd,
+    meta: {
+      accessWriter: true,
+    },
   },
   {
     path: '/posts/edit',
     component: PostEdit,
+    meta: {
+      accessWriter: true,
+    },
   },
   {
     path: '/posts/:id',
@@ -44,6 +51,21 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  const accessWriter = to.meta.accessWriter
+  const currentUserHasWriterRole = store.getters['user/isWriterRole']
+
+  if (accessWriter && currentUserHasWriterRole) {
+    next()
+  }
+
+  if (accessWriter && !currentUserHasWriterRole) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
