@@ -12,13 +12,29 @@
     <template slot="end">
       <b-navbar-item tag="div">
         <div class="buttons">
-          <button class="button">
-            Добавить статью
-          </button>
+          <router-link
+            v-if="isWriterRole"
+            to="/posts/add"
+            class="button is-success"
+          >
+            Добавить пост
+          </router-link>
 
-          <button class="button">
+          <b-button
+            v-if="isAuth"
+            type="is-danger"
+            @click="onLogout"
+          >
             Выход
-          </button>
+          </b-button>
+
+          <router-link
+            v-else
+            to="/auth/sign-in"
+            class="button"
+          >
+            Войти
+          </router-link>
         </div>
       </b-navbar-item>
     </template>
@@ -26,7 +42,28 @@
 </template>
 
 <script>
-export default {
-  name: 'Header'
-}
+  import { mapGetters, mapActions } from 'vuex'
+
+  export default {
+    name: 'Header',
+    computed: {
+      ...mapGetters('user', [
+        'isWriterRole',
+        'isAuth',
+      ]),
+    },
+    methods: {
+      ...mapActions('auth', [
+        'logout',
+      ]),
+
+      onLogout () {
+        this.logout()
+
+        this.$router.push({
+          path: '/'
+        })
+      }
+    },
+  }
 </script>

@@ -1,11 +1,12 @@
 <template>
   <div class="layout layout-auth">
-    <slot/>
+    <Header />
+    <slot />
   </div>
 </template>
 
 <script>
-export default {
-  name: 'AuthLayout'
-}
+  export default {
+    name: 'AuthLayout'
+  }
 </script>

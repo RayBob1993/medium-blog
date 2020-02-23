@@ -1,9 +1,21 @@
 <template>
   <div class="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
-<style lang="scss">
+<script>
+  import { mapActions } from 'vuex'
 
-</style>
+  export default {
+    name: 'App',
+    created () {
+      this.init()
+    },
+    methods: {
+      ...mapActions([
+        'init',
+      ]),
+    },
+  }
+</script>

@@ -1,20 +1,18 @@
 <template>
-  <AuthLayout>
+  <DefaultLayout>
     <div class="container">
       <form action="">
-        <b-field label="Логин">
+        <b-field label="Название">
           <b-input
-            v-model="form.model.login"
+            v-model="form.model.title"
             type="text"
-            maxlength="30"
           />
         </b-field>
 
-        <b-field label="Пароль">
+        <b-field label="Описание">
           <b-input
-            v-model="form.model.password"
-            type="password"
-            password-reveal
+            v-model="form.model.description"
+            type="textarea"
           />
         </b-field>
 
@@ -23,53 +21,60 @@
             <b-button
               :loading="isLoading"
               type="is-success"
-              @click="onSumbit"
+              @click="onSubmit"
             >
-              Войти
+              Добавить
             </b-button>
           </div>
         </b-field>
       </form>
     </div>
-  </AuthLayout>
+  </DefaultLayout>
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   import { Loading } from '../../mixins/utils'
+  import PostModel from '../../models/PostModel'
 
   export default {
-    name: 'SignInPage',
+    name: 'PostAddPage',
     mixins: [
       Loading,
     ],
     data: () => ({
       form: {
         model: {
-          login: 'reader@mail.com',
-          password: 123456,
+          title: '',
+          description: '',
         },
       },
     }),
-    methods: {
-      ...mapActions('auth', [
-        'signIn',
+    computed: {
+      ...mapState('user', [
+        'user',
       ]),
-      async onSumbit () {
+    },
+    methods: {
+      ...mapActions('posts', [
+        'addPost',
+      ]),
+      async onSubmit () {
         try {
           this.setLoading(true)
 
-          await this.signIn(this.form.model)
+          const post = new PostModel({
+            ...this.form.model,
+            userId: this.user.id,
+          })
+
+          await this.addPost(post)
 
           this.$router.push({
             path: '/'
           })
-        } catch ({ message }) {
-          this.$buefy.notification.open({
-            message,
-            position: 'is-bottom-left',
-            type: 'is-danger'
-          })
+        } catch (error) {
+          console.error(error)
         } finally {
           this.setLoading(false)
         }

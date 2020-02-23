@@ -1,7 +1,9 @@
 <template>
   <div class="layout layout-default">
-    <Header/>
-    <slot/>
+    <Header />
+    <main class="main">
+      <slot />
+    </main>
   </div>
 </template>
 
@@ -10,3 +12,13 @@
     name: 'DefaultLayout'
   }
 </script>
+
+<style lang="scss">
+  .layout {
+    &-default {
+      .main {
+        margin-top: 20px;
+      }
+    }
+  }
+</style>
